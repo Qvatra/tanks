@@ -1,13 +1,16 @@
 import _ from 'lodash';
 
 class Tank {
-	constructor(name) {
+	constructor(name, { x, y }, angle) {
 		const _name = name;
-		let _enemiesCoords = [];
+		let _enemyCoords = [];
+		let _angle = angle;
+		const _speed = 1;
+		let _tankCoords = { x, y };
 		
-		this.setRadar = (enemiesCoords) => {
-			console.log('Tank', _name, 'sees enemies at', JSON.stringify(enemiesCoords));
-			_enemiesCoords = enemiesCoords;
+		this.updateRadar = enemyCoords => {
+			console.log('Tank', _name, 'sees enemies at', JSON.stringify(enemyCoords));
+			_enemyCoords = enemyCoords;
 		};
 		
 		this.shoot = () => {
@@ -15,19 +18,23 @@ class Tank {
 		};
 		
 		this.move = () => {
-			const movement = {x: 1, y: -1}
-			console.log('Tank', _name, 'moves', movement);
-			return movement;
+			_tankCoords = {
+				x: _tankCoords.x + Math.cos(_angle),
+				y: _tankCoords.y + Math.sin(_angle)				
+			};
+			console.log('Tank', _name, 'moves to', JSON.stringify(_tankCoords));
 		};
 		
-		this.rotate = () => {
-			console.log('Tank', _name, 'rotates');
-			return {x: 1, y: 1};
+		this.setAngle = angle => {
+			console.log('Tank', _name, 'rotates', angle, 'degrees');
+			_angle = angle;
 		};
 		
-		this.getName = () => {
-			return _name;
-		};
+		this.getName = () => _name;
+
+		this.getCoords = () => _tankCoords;
+
+		this.getAngle = () => _angle;
 	}
 }
 

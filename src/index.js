@@ -4,12 +4,11 @@ import Tank from './Tank';
 import _ from 'lodash';
 
 const battleField = new BattleField();
-battleField.addTank(new Tank('A'), {x:0, y:0});
-battleField.addTank(new Tank('B'), {x:50, y:50});
+battleField.addTank(new Tank('A', {x:0, y:0}, 90));
+battleField.addTank(new Tank('B', {x:50, y:50}, -90));
 
 const removeAllDeadTanks = () => {
-	console.log('cleaning the battlefield');
-	
+	console.log('removeAllDeadTanks');
 };
 
 const updateRadars = () => {
@@ -17,14 +16,18 @@ const updateRadars = () => {
 	
 	_.forEach(allTanks, tank => {
 		const enemyTanks = _.filter(allTanks, t => t.getName() !== tank.getName());
-		const enemyCoords = _.map(enemyTanks, t => t.coords);
-		tank.setRadar(enemyCoords);
+		const enemyCoords = _.map(enemyTanks, t => t.getCoords());
+		tank.updateRadar(enemyCoords);
 	});
 };
 
-const rotateAll = () => {
-	_.forEach(battleField.getTanks(), tank => {
-		tank.rotate();
+const applyTanksAi = () => {
+	_.forEach(battleField.getTanks(), (tank, idx) => {
+		if (idx === 0) {
+			tank.setAngle(30);
+		} else { 
+			tank.setAngle(-tank.getAngle());
+		}
 	});
 };
 
@@ -32,22 +35,20 @@ const shootAll = () => {
 	_.forEach(battleField.getTanks(), tank => {
 		tank.shoot();
 	});
-	removeAllDeadTanks();
 };
 
 const moveAll = () => {
 	_.forEach(battleField.getTanks(), tank => {
-		const movement = tank.move();
-		tank.coords.x += movement.x;
-		tank.coords.y += movement.y;
+		tank.move();
 	});
 };
 
 let i = 0;
-while (battleField.moreThanOneTank()) {
+while (battleField.isMoreThanOneTank()) {
 	updateRadars();
-	rotateAll();
+	applyTanksAi();
 	shootAll();
+	removeAllDeadTanks();
 	moveAll();
 	
 	if (i++ === 3) {

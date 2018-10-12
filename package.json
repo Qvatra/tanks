@@ -1,7 +1,5 @@
 {
-  "name": "project-webpack",
-  "version": "1.0.0",
-  "description": "",
+  "name": "tanks",
   "main": "webpack.config.js",
   "babel": {
     "presets": [
@@ -23,16 +21,6 @@
     "start": "webpack-dev-server --open",
     "build": "webpack"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jdiejim/Seed-project-webpack.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jdiejim/Seed-project-webpack/issues"
-  },
-  "homepage": "https://github.com/jdiejim/Seed-project-webpack#readme",
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
