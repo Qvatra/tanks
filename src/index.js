@@ -1,14 +1,22 @@
 import './index.scss'
 import BattleField from './BattleField';
 import Tank from './Tank';
+import Bullet from './Bullet';
 import _ from 'lodash';
 
 const battleField = new BattleField();
-battleField.addTank(new Tank('A', {x:0, y:0}, 90));
-battleField.addTank(new Tank('B', {x:50, y:50}, -90));
+battleField.addTank(new Tank('A', {x:1, y:1}, 90));
+battleField.addTank(new Tank('B', {x:10, y:10}, -90));
 
-const removeAllDeadTanks = () => {
-	console.log('removeAllDeadTanks');
+const removeObjects = () => {
+	console.log('removeObjects');
+	const bullets = battleField.getBullets();
+
+	_.forEach(bullets, bullet => {
+		if (bullet && !battleField.isInsideBoundaries(bullet.getCoords())) {
+			battleField.removeBullet(bullet);
+		}
+	});
 };
 
 const updateRadars = () => {
@@ -34,12 +42,17 @@ const applyTanksAi = () => {
 const shootAll = () => {
 	_.forEach(battleField.getTanks(), tank => {
 		tank.shoot();
+		battleField.addBullet(new Bullet(tank.getCoords(), tank.getVector()));
 	});
 };
 
-const moveAll = () => {
+const moveObjects = () => {
 	_.forEach(battleField.getTanks(), tank => {
 		tank.move();
+	});
+
+	_.forEach(battleField.getBullets(), bullet => {
+		bullet.move();
 	});
 };
 
@@ -48,8 +61,8 @@ while (battleField.isMoreThanOneTank()) {
 	updateRadars();
 	applyTanksAi();
 	shootAll();
-	removeAllDeadTanks();
-	moveAll();
+	removeObjects();
+	moveObjects();
 	
 	if (i++ === 3) {
 		battleField.removeTank(battleField.getTanks()[1]);

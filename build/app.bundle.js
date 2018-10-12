@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -9493,7 +9493,7 @@ else if(freeModule){// Export for Node.js.
 (freeModule.exports=_)._=_;// Export for CommonJS support.
 freeExports._=_;}else{// Export to the global object.
 root._=_;}}).call(undefined);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(8)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(9)(module)))
 
 /***/ }),
 /* 1 */
@@ -9527,9 +9527,15 @@ var BattleField = function BattleField() {
 	_classCallCheck(this, BattleField);
 
 	var _tanks = [];
+	var _bullets = [];
+	var _fieldSize = { x: 20, y: 20 };
 
 	this.addTank = function (tank) {
 		_tanks.push(tank);
+	};
+
+	this.addBullet = function (bullet) {
+		_bullets.push(bullet);
 	};
 
 	this.removeTank = function (tank) {
@@ -9538,8 +9544,22 @@ var BattleField = function BattleField() {
 		});
 	};
 
+	this.removeBullet = function (bullet) {
+		_lodash2.default.remove(_bullets, function (b) {
+			return b === bullet;
+		});
+	};
+
 	this.getTanks = function () {
 		return _tanks;
+	};
+
+	this.getBullets = function () {
+		return _bullets;
+	};
+
+	this.isInsideBoundaries = function (coords) {
+		return coords.x > 0 && coords.y > 0 && coords.x < _fieldSize.x && coords.y < _fieldSize.y;
 	};
 
 	this.isMoreThanOneTank = function () {
@@ -9560,6 +9580,41 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Bullet = function Bullet(coords, vector) {
+	_classCallCheck(this, Bullet);
+
+	var _vector = vector;
+	var _coords = coords;
+	var _speed = 5;
+
+	this.move = function () {
+		_coords = {
+			x: _coords.x + _speed * _vector.x,
+			y: _coords.y + _speed * _vector.y
+		};
+		console.log('a bullet moves to', JSON.stringify(_coords));
+	};
+
+	this.getCoords = function () {
+		return _coords;
+	};
+};
+
+exports.default = Bullet;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
 var _lodash = __webpack_require__(0);
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -9569,6 +9624,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Tank = function Tank(name, _ref, angle) {
+	var _this = this;
+
 	var x = _ref.x,
 	    y = _ref.y;
 
@@ -9591,10 +9648,10 @@ var Tank = function Tank(name, _ref, angle) {
 
 	this.move = function () {
 		_tankCoords = {
-			x: _tankCoords.x + Math.cos(_angle),
-			y: _tankCoords.y + Math.sin(_angle)
+			x: _tankCoords.x + _this.getVector().x,
+			y: _tankCoords.y + _this.getVector().y
 		};
-		console.log('Tank', _name, 'moves to', _tankCoords);
+		console.log('Tank', _name, 'moves to', JSON.stringify(_tankCoords));
 	};
 
 	this.setAngle = function (angle) {
@@ -9610,6 +9667,13 @@ var Tank = function Tank(name, _ref, angle) {
 		return _tankCoords;
 	};
 
+	this.getVector = function () {
+		return {
+			x: Math.cos(_angle),
+			y: Math.sin(_angle)
+		};
+	};
+
 	this.getAngle = function () {
 		return _angle;
 	};
@@ -9618,13 +9682,13 @@ var Tank = function Tank(name, _ref, angle) {
 exports.default = Tank;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(10);
+var content = __webpack_require__(11);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -9632,7 +9696,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -9649,7 +9713,7 @@ if(false) {
 }
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9731,7 +9795,7 @@ function toComment(sourceMap) {
 }
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9826,7 +9890,7 @@ module.exports = function (css) {
 };
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9856,7 +9920,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9886,21 +9950,25 @@ module.exports = function (module) {
 };
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(4);
+__webpack_require__(5);
 
 var _BattleField = __webpack_require__(2);
 
 var _BattleField2 = _interopRequireDefault(_BattleField);
 
-var _Tank = __webpack_require__(3);
+var _Tank = __webpack_require__(4);
 
 var _Tank2 = _interopRequireDefault(_Tank);
+
+var _Bullet = __webpack_require__(3);
+
+var _Bullet2 = _interopRequireDefault(_Bullet);
 
 var _lodash = __webpack_require__(0);
 
@@ -9909,11 +9977,18 @@ var _lodash2 = _interopRequireDefault(_lodash);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var battleField = new _BattleField2.default();
-battleField.addTank(new _Tank2.default('A', { x: 0, y: 0 }, 90));
-battleField.addTank(new _Tank2.default('B', { x: 50, y: 50 }, -90));
+battleField.addTank(new _Tank2.default('A', { x: 1, y: 1 }, 90));
+battleField.addTank(new _Tank2.default('B', { x: 10, y: 10 }, -90));
 
-var removeAllDeadTanks = function removeAllDeadTanks() {
-	console.log('removeAllDeadTanks');
+var removeObjects = function removeObjects() {
+	console.log('removeObjects');
+	var bullets = battleField.getBullets();
+
+	_lodash2.default.forEach(bullets, function (bullet) {
+		if (bullet && !battleField.isInsideBoundaries(bullet.getCoords())) {
+			battleField.removeBullet(bullet);
+		}
+	});
 };
 
 var updateRadars = function updateRadars() {
@@ -9943,12 +10018,17 @@ var applyTanksAi = function applyTanksAi() {
 var shootAll = function shootAll() {
 	_lodash2.default.forEach(battleField.getTanks(), function (tank) {
 		tank.shoot();
+		battleField.addBullet(new _Bullet2.default(tank.getCoords(), tank.getVector()));
 	});
 };
 
-var moveAll = function moveAll() {
+var moveObjects = function moveObjects() {
 	_lodash2.default.forEach(battleField.getTanks(), function (tank) {
 		tank.move();
+	});
+
+	_lodash2.default.forEach(battleField.getBullets(), function (bullet) {
+		bullet.move();
 	});
 };
 
@@ -9957,8 +10037,8 @@ while (battleField.isMoreThanOneTank()) {
 	updateRadars();
 	applyTanksAi();
 	shootAll();
-	removeAllDeadTanks();
-	moveAll();
+	removeObjects();
+	moveObjects();
 
 	if (i++ === 3) {
 		battleField.removeTank(battleField.getTanks()[1]);
@@ -9968,10 +10048,10 @@ while (battleField.isMoreThanOneTank()) {
 document.getElementById('test').innerHTML = 'Tank ' + _lodash2.default.first(battleField.getTanks()).getName() + ' won the game!';
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(true);
+exports = module.exports = __webpack_require__(6)(true);
 // imports
 
 
@@ -9982,7 +10062,7 @@ exports.push([module.i, "body {\n  background-color: #09c476; }\n\nh1 {\n  margi
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -10019,7 +10099,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(6);
+	fixUrls = __webpack_require__(7);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {

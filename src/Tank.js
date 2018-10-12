@@ -19,8 +19,8 @@ class Tank {
 		
 		this.move = () => {
 			_tankCoords = {
-				x: _tankCoords.x + Math.cos(_angle),
-				y: _tankCoords.y + Math.sin(_angle)				
+				x: _tankCoords.x + this.getVector().x,
+				y: _tankCoords.y + this.getVector().y				
 			};
 			console.log('Tank', _name, 'moves to', JSON.stringify(_tankCoords));
 		};
@@ -33,6 +33,13 @@ class Tank {
 		this.getName = () => _name;
 
 		this.getCoords = () => _tankCoords;
+
+		this.getVector = () => { 
+			return {
+				x: Math.cos(_angle),
+				y: Math.sin(_angle)
+			}
+		};
 
 		this.getAngle = () => _angle;
 	}
